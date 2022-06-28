@@ -13,7 +13,7 @@ export default function RegisterPage () {
 
     return (
         <Page >
-            <Logo src={logo} />
+            <Logo src={logo} alt='logo' />
             <form onSubmit={handleForm}>
                 <Input placeholder="Nome" required />
                 <Input placeholder="E-mail" required />
@@ -21,7 +21,7 @@ export default function RegisterPage () {
                 <Input placeholder="Confirmar a senha" required />
                 <Button>Cadastrar</Button>
             </form>
-            <SubText to='/login' >Já tem uma conta? Entre agora!</SubText>
+            <SubText to='/' >Já tem uma conta? Entre agora!</SubText>
         </Page>
     )
 }

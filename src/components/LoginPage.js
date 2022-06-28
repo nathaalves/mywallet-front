@@ -13,7 +13,7 @@ export default function LoginPage () {
 
     return (
         <Page centeredContent >
-            <Logo src={logo} />
+            <Logo src={logo} alt='logo' />
             <form onSubmit={handleForm} >
                 <Input placeholder="E-mail" />
                 <Input placeholder="Senha" />
