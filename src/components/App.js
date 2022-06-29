@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import LoginPage from './LoginPage';
 import RegistrationPage from './RegistrationPage';
 import HistoricPage from "./HistoricPage";
-import RegisterPage from "./RegisterPage";
+import CashHandlingPage from "./CashHandlingPage";
 
 export default function App () {
 
@@ -15,7 +15,7 @@ export default function App () {
                     <Route path="/" element={ <LoginPage /> } />
                     <Route path='/registration' element={ <RegistrationPage /> } />
                     <Route path='/historic' element={ <HistoricPage /> } />
-                    <Route path='/register/:action' element={ <RegisterPage /> } />
+                    <Route path='/register/:action' element={ <CashHandlingPage /> } />
                 </Routes>
             </BrowserRouter>
         </>
