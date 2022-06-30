@@ -1,4 +1,8 @@
+import axios from "axios";
+import { useEffect, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import UserContext from "../contexts/UserContext";
 import Page from "../shared/Page";
 import StyledButton from "../shared/StyledButton";
 import Title from "../shared/Title";
@@ -15,16 +19,43 @@ function Register ({date, description, value}) {
 }
 
 
-export default function HistoricPage () {
+export default function CashFlowPage () {
+
+    const navigate = useNavigate();
+    const { session } = useContext(UserContext);
+    const [cashFlow, setCashFlow] = useState([]);
+
+    useEffect( () => {
+
+        const API_URL = 'http://localhost:5000';
+        const API_ROUTE = '/cash-flow';
+        console.log(session.token)
+        const promise = axios.get(
+            `${API_URL}${API_ROUTE}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${session.token}`
+                }
+            }
+        );
+
+        promise.then( response => {
+            setCashFlow([...response.data]);
+            console.log(response.data)
+        });
+        
+    }, []);
+
+    function goToAddCashFlowPage (type) {
+        navigate(`/add-cash-flow/${type}`);
+    };
 
     return (
         <Page>
             <Title withButton >Olá, Fulano</Title>
             <Registers>
                 <div>
-                    <Register date='21/08' description='Natha' value='1.000,00' />
-                    <Register date='21/08' description='Natha' value='1.000,00' />
-                    <Register date='21/08' description='Natha' value='1.000,00' />
+                    {cashFlow.map(register => <Register date='21/08' description={register.description} value={register.value} />)}
                 </div>
                 <div>
                     <h3>SALDO</h3>
@@ -32,8 +63,8 @@ export default function HistoricPage () {
                 </div>
             </Registers>
             <ButtonContainer>
-                <StyledButton action='add' />
-                <StyledButton action='remove' />
+                <StyledButton type='cash-in' onClick={ () => goToAddCashFlowPage('cash-in') } />
+                <StyledButton type='cash-out' onClick={ () => goToAddCashFlowPage('cash-out') } />
             </ButtonContainer>
         </Page>
     )

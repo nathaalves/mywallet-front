@@ -4,7 +4,8 @@ import logo from '../assets/images/logo.svg';
 import Logo from "../shared/Logo";
 import Button from "../shared/Button";
 import SubText from "../shared/SubText";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import UserContext from "../contexts/UserContext";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -20,9 +21,9 @@ export default function LoginPage () {
             //navigate('/historic');
         };
     }, []);
-
+    
     const navigate = useNavigate();
-    const [session, setSession] = useState(null);
+    const { session, setSession } = useContext(UserContext);
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
@@ -35,7 +36,7 @@ export default function LoginPage () {
         });
     };
 
-    function submit (e) {
+    function submitForm (e) {
 
         e.preventDefault();
 
@@ -44,21 +45,20 @@ export default function LoginPage () {
 
         const promise = axios.post(`${API_URL}${API_ROUTE}`, credentials);
 
-        promise
-            .then( response => {
-                setSession( ...response.data );
-                localStorage.setItem('MyWalletSession', JSON.stringify(session));
-                navigate('/historic');
-            })
-            .catch( error => {
-                console.log(error.response.data);
+        promise.then( response => {
+            setSession({ ...response.data });
+            localStorage.setItem('MyWalletSession', JSON.stringify(session));
+            navigate('/cash-flow');
+        });
+        promise.catch( error => {
+                console.log(error.response.data)
         });
     };
 
     return (
         <Page centeredContent >
             <Logo src={logo} alt='logo' />
-            <form onSubmit={submit} >
+            <form onSubmit={submitForm} >
                 <Input placeholder="E-mail" value={credentials.email} name='email' onChange={handleForm} />
                 <Input placeholder="Senha" value={credentials.password} name='password' onChange={handleForm} />
                 <Button>Entrar</Button>

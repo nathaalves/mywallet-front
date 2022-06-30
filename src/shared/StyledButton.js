@@ -2,22 +2,22 @@ import styled from "styled-components";
 import add from '../assets/images/add.svg';
 import remove from '../assets/images/remove.svg';
 
-export default function StyledButton ({ action }) {
+export default function StyledButton ({ type, onClick }) {
 
     let src = null;
     let text = null;
-    if (action === 'add') {
+    if (type === 'cash-in') {
         src = add;
         text = 'Nova entrada';
     };
-    if (action === 'remove') {
+    if (type === 'cash-out') {
         src = remove;
         text = 'Nova saída';
     };
 
     return (
-        <Container>
-            <img src={src} alt={`${action} button`} />
+        <Container onClick={onClick}>
+            <img src={src} alt={`${type} button`} />
             <h3>{text}</h3>
         </Container>
     )
