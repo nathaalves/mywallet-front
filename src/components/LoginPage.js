@@ -8,26 +8,43 @@ import { useState, useEffect, useContext } from 'react';
 import UserContext from "../contexts/UserContext";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Form from "../shared/Form";
 
 export default function LoginPage () {
-
-    useEffect ( () => {
-        if (localStorage.getItem('MyWalletSesseion') !== null) {
-
-            const API_URL = 'http://localhost:5000';
-            const API_ROUTE = '/login';
-
-
-            //navigate('/historic');
-        };
-    }, []);
     
     const navigate = useNavigate();
     const { session, setSession } = useContext(UserContext);
+    console.log(`2: ${session}`)
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
     });
+
+    useEffect ( () => {
+
+        if (session !== null) {
+            console.log(session)
+            const API_URL = 'http://localhost:5000';
+            const API_ROUTE = '/session';
+
+            const promise = axios.post(
+                `${API_URL}${API_ROUTE}`,
+                null, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.token}`
+                    }
+                }
+            );
+
+            promise.then( () => {
+                navigate('/cash-flow')
+            });
+            promise.catch( () => {
+                navigate('/')
+            });
+        };
+    }, []);
 
     function handleForm (e) {
         setCredentials({
@@ -47,7 +64,7 @@ export default function LoginPage () {
 
         promise.then( response => {
             setSession({ ...response.data });
-            localStorage.setItem('MyWalletSession', JSON.stringify(session));
+            localStorage.setItem('MyWalletSession', JSON.stringify(response.data));
             navigate('/cash-flow');
         });
         promise.catch( error => {
@@ -58,11 +75,11 @@ export default function LoginPage () {
     return (
         <Page centeredContent >
             <Logo src={logo} alt='logo' />
-            <form onSubmit={submitForm} >
+            <Form onSubmit={submitForm} >
                 <Input placeholder="E-mail" value={credentials.email} name='email' onChange={handleForm} />
                 <Input placeholder="Senha" value={credentials.password} name='password' onChange={handleForm} />
                 <Button>Entrar</Button>
-            </form>
+            </Form>
             <SubText to='/registration'>Primeira vez? Cadastre-se!</SubText>
         </Page>
     );

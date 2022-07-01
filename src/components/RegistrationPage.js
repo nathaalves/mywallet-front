@@ -7,6 +7,7 @@ import SubText from "../shared/SubText";
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import Form from "../shared/Form";
 
 export default function RegistrationPage () {
 
@@ -40,13 +41,13 @@ export default function RegistrationPage () {
     return (
         <Page centeredContent >
             <Logo src={logo} alt='logo' />
-            <form onSubmit={submitForm}>
+            <Form onSubmit={submitForm}>
                 <Input placeholder="Nome" name='name' onChange={handleForm} required />
                 <Input placeholder="E-mail" name='email' onChange={handleForm} required />
                 <Input placeholder="Senha" name='password' onChange={handleForm} required />
                 <Input placeholder="Confirmar a senha" name='pwConfirm' onChange={handleForm} required />
                 <Button>Cadastrar</Button>
-            </form>
+            </Form>
             <SubText to='/' >Já tem uma conta? Entre agora!</SubText>
         </Page>
     )

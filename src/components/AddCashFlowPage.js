@@ -6,13 +6,14 @@ import axios from 'axios';
 import { useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import { useParams } from "react-router-dom";
+import Form from "../shared/Form";
 
 export default function AddCashFlowPage () {
 
 
     const { type } = useParams();
     const { session } = useContext(UserContext);
-    
+    console.log(`4: ${session}`)
     const [register, setRegister] = useState({
         value: '',
         description: ''
@@ -36,19 +37,17 @@ export default function AddCashFlowPage () {
 
         const API_URL = 'http://localhost:5000';
         const API_ROUTE = '/cash-flow';
-
-        const promise = axios.post(
-            `${API_URL}${API_ROUTE}`, 
-            {
-                ...register,
-                type
-            }, 
-            {
-                headers: {
-                    Authorization: `Bearer ${session.token}`
-                }
+        const body = {
+            ...register,
+            type
+        };
+        const header = {
+            headers: {
+                Authorization: `Bearer ${session.token}`
             }
-        );
+        };
+
+        const promise = axios.post(`${API_URL}${API_ROUTE}`, body, header);
 
         promise
             .then( response => {
@@ -57,16 +56,21 @@ export default function AddCashFlowPage () {
             .catch( error => {
                 console.log(error.response.data)
             })
+
+            setRegister({
+                value: '',
+                description: ''
+            });
     };
 
     return (
         <Page >
-            <Title>{`Nova ${pageName}`}</Title>
-            <form onSubmit={submitForm}>
+            <Title action='back'>{`Nova ${pageName}`}</Title>
+            <Form onSubmit={submitForm}>
                 <Input placeholder="Valor" name='value' value={register.value} onChange={handleForm} required />
                 <Input placeholder="Descrição" name='description' value={register.description} onChange={handleForm} required />
                 <Button>{`Salvar ${pageName}`}</Button>
-            </form>
+            </Form>
         </Page>
     );
 }

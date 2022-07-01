@@ -8,11 +8,17 @@ import StyledButton from "../shared/StyledButton";
 import Title from "../shared/Title";
 
 
-function Register ({date, description, value}) {
+function Register ({date, description, value, type}) {
+
+    let color = null;
+    if (type === 'cash-in') color = '#03AC00';
+    if (type === 'cash-out') color = '#C70000';
+    
+    const formatDate = `${date[8]}${date[9]}/${date[5]}${date[6]}`
 
     return (
-        <RegisterContainer>
-            <h3><span>{date}</span>{description}</h3>
+        <RegisterContainer color={color} >
+            <h3><span>{formatDate}</span>{description}</h3>
             <span>{value}</span>
         </RegisterContainer>
     )
@@ -25,11 +31,19 @@ export default function CashFlowPage () {
     const { session } = useContext(UserContext);
     const [cashFlow, setCashFlow] = useState([]);
 
+    let balance = 0;
+    let color = null;
+    cashFlow.forEach(register => {
+        if (register.type === 'cash-in') balance += Number(register.value);
+        if (register.type === 'cash-out') balance -= Number(register.value);
+        color = (balance < 0) ? '#C70000' : '#03AC00';
+    });
+
     useEffect( () => {
 
         const API_URL = 'http://localhost:5000';
         const API_ROUTE = '/cash-flow';
-        console.log(session.token)
+        
         const promise = axios.get(
             `${API_URL}${API_ROUTE}`,
             {
@@ -41,7 +55,6 @@ export default function CashFlowPage () {
 
         promise.then( response => {
             setCashFlow([...response.data]);
-            console.log(response.data)
         });
         
     }, []);
@@ -52,14 +65,21 @@ export default function CashFlowPage () {
 
     return (
         <Page>
-            <Title withButton >Olá, Fulano</Title>
-            <Registers>
+            <Title action='exit' >{`Olá, ${session.userName}`}</Title>
+            <Registers color={color}>
                 <div>
-                    {cashFlow.map(register => <Register date='21/08' description={register.description} value={register.value} />)}
+                    {cashFlow.map(register => 
+                        <Register 
+                            date={register.date}
+                            description={register.description} 
+                            value={register.value} 
+                            type={register.type}
+                        />
+                    )}
                 </div>
                 <div>
                     <h3>SALDO</h3>
-                    <span>3.000,00</span>
+                    <span>{balance < 0 ? balance * -1 : balance}</span>
                 </div>
             </Registers>
             <ButtonContainer>
@@ -99,7 +119,7 @@ const Registers = styled.div`
         }
 
         span {
-
+            color: ${props => props.color}
         }
     }
 `;

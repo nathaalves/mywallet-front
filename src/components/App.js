@@ -1,16 +1,16 @@
 import GlobalStyles from "../assets/styles/GlobalStyles"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"
 import LoginPage from './LoginPage';
 import RegistrationPage from './RegistrationPage';
 import CashFlowPage from "./CashFlowPage";
 import AddCashFlowPage from "./AddCashFlowPage";
 import UserContext from "../contexts/UserContext";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from "axios";
 
 export default function App () {
 
-
-    const [session, setSession] = useState(null);
+    const [session, setSession] = useState(JSON.parse(localStorage.getItem('MyWalletSession')));
 
     return (
         <UserContext.Provider value={{
