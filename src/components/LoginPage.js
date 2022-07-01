@@ -14,7 +14,7 @@ export default function LoginPage () {
     
     const navigate = useNavigate();
     const { session, setSession } = useContext(UserContext);
-    console.log(`2: ${session}`)
+    
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
@@ -23,7 +23,7 @@ export default function LoginPage () {
     useEffect ( () => {
 
         if (session !== null) {
-            console.log(session)
+            
             const API_URL = 'http://localhost:5000';
             const API_ROUTE = '/session';
 
@@ -37,12 +37,7 @@ export default function LoginPage () {
                 }
             );
 
-            promise.then( () => {
-                navigate('/cash-flow')
-            });
-            promise.catch( () => {
-                navigate('/')
-            });
+            promise.then( () => navigate('/cash-flow'));
         };
     }, []);
 
@@ -68,7 +63,7 @@ export default function LoginPage () {
             navigate('/cash-flow');
         });
         promise.catch( error => {
-                console.log(error.response.data)
+                //console.log(error.response.data)
         });
     };
 

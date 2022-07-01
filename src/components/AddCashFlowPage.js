@@ -13,9 +13,9 @@ export default function AddCashFlowPage () {
 
     const { type } = useParams();
     const { session } = useContext(UserContext);
-    console.log(`4: ${session}`)
+    
     const [register, setRegister] = useState({
-        value: '',
+        value: 'R$ 0,00',
         description: ''
     });
 
@@ -25,10 +25,39 @@ export default function AddCashFlowPage () {
 
     function handleForm (e) {
 
-        setRegister({
-            ...register,
-            [e.target.name]: e.target.value
-        });
+        
+
+        if (e.target.name === 'value') {
+
+            const formatCurrency = function(amount) {
+                return "R$ " + parseFloat(amount).toFixed(2).replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            };
+
+            let value = e.target.value;
+            if (value.length <= 20 && !/[a-zA-Z]/.test(value.slice(3, 20))) {
+
+                value = value?.replace('.', '');
+                value = value?.replace(',', '');
+                value = value?.replace('R$ ', '');
+                value = Number(value)/100;
+                value = formatCurrency(value)
+            } else {
+                value = register.value;
+            };
+            
+
+            setRegister({
+                ...register,
+                [e.target.name]: value
+            });
+        } else {
+            setRegister({
+                ...register,
+                [e.target.name]: e.target.value
+            });
+        };
+
+        
     };
 
     function submitForm (e) {
@@ -37,6 +66,7 @@ export default function AddCashFlowPage () {
 
         const API_URL = 'http://localhost:5000';
         const API_ROUTE = '/cash-flow';
+        
         const body = {
             ...register,
             type
@@ -51,14 +81,14 @@ export default function AddCashFlowPage () {
 
         promise
             .then( response => {
-                console.log(response.data)
+                //console.log(response.data)
             })
             .catch( error => {
-                console.log(error.response.data)
+                //console.log(error.response.data)
             })
 
             setRegister({
-                value: '',
+                value: 'R$ 0,00',
                 description: ''
             });
     };

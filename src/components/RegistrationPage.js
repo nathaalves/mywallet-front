@@ -34,7 +34,7 @@ export default function RegistrationPage () {
                 navigate('/');
             })
             .catch( (error) => {
-                console.log(error.response.data)
+                //console.log(error.response.data)
         });
     };
 

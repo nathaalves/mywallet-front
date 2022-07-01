@@ -14,12 +14,20 @@ function Register ({date, description, value, type}) {
     if (type === 'cash-in') color = '#03AC00';
     if (type === 'cash-out') color = '#C70000';
     
-    const formatDate = `${date[8]}${date[9]}/${date[5]}${date[6]}`
+    const formatDate = `${date[8]}${date[9]}/${date[5]}${date[6]}`;
+
+    const formatCurrency = function(amount) {
+        amount = amount?.replace('.', '');
+        amount = amount?.replace(',', '');
+        amount = amount?.replace('R$ ', '');
+        amount = Number(amount)/100;
+        return parseFloat(amount).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+    };
 
     return (
         <RegisterContainer color={color} >
             <h3><span>{formatDate}</span>{description}</h3>
-            <span>{value}</span>
+            <span>{formatCurrency(value)}</span>
         </RegisterContainer>
     )
 }
@@ -30,12 +38,16 @@ export default function CashFlowPage () {
     const navigate = useNavigate();
     const { session } = useContext(UserContext);
     const [cashFlow, setCashFlow] = useState([]);
-
+    
     let balance = 0;
     let color = null;
     cashFlow.forEach(register => {
-        if (register.type === 'cash-in') balance += Number(register.value);
-        if (register.type === 'cash-out') balance -= Number(register.value);
+        let value = register.value?.replace('.', '');
+        value = value?.replace(',', '');
+        value = value?.replace('R$ ', '');
+        value = Number(value)/100
+        if (register.type === 'cash-in') balance += Number(value);
+        if (register.type === 'cash-out') balance -= Number(value);
         color = (balance < 0) ? '#C70000' : '#03AC00';
     });
 
@@ -68,8 +80,9 @@ export default function CashFlowPage () {
             <Title action='exit' >{`Olá, ${session.userName}`}</Title>
             <Registers color={color}>
                 <div>
-                    {cashFlow.map(register => 
+                    {cashFlow.map((register, index) => 
                         <Register 
+                            key={index}
                             date={register.date}
                             description={register.description} 
                             value={register.value} 

@@ -10,7 +10,7 @@ export default function Title ({ children, action }) {
 
     const navigate = useNavigate();
     const { session, setSession } = useContext(UserContext);
-
+    
     let src = null;
     let alt = null;
     if (action === "exit") {
@@ -24,8 +24,7 @@ export default function Title ({ children, action }) {
     function handleClick () {
         
         if (action === "exit") {
-            localStorage.removeItem('MyWalletSession');
-
+            
             const API_URL = 'http://localhost:5000';
             const API_ROUTE = "/session";
 
@@ -37,9 +36,11 @@ export default function Title ({ children, action }) {
 
             const promise = axios.delete(`${API_URL}${API_ROUTE}`, header)
             promise.then( () => {
-                setSession(null);
+                
                 navigate('/');
-            })
+                localStorage.removeItem('MyWalletSession');
+                setSession(null);
+            });
             
         };
         if (action === "back") navigate('/');
