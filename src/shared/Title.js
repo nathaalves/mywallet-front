@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default function Title ({ children, action }) {
 
@@ -16,35 +13,36 @@ export default function Title ({ children, action }) {
     
     let src = null;
     let alt = null;
+    
     if (action === "exit") {
         src = exit;
         alt = 'exit button';
     };
+
     if (action === 'back') {
         src = back;
         alt = 'return button';
-    }
+    };
+
     function handleClick () {
         
         if (action === "exit") {
             
-            const API_URI = process.env.API_URI;
+            const API_URI = 'https://my-wallet-server-project.herokuapp.com';
             const API_ROUTE = "/session";
 
             const header = {
                 headers: {
                     Authorization: `Bearer ${session.token}`
                 }
-            }
+            };
 
             const promise = axios.delete(`${API_URI}${API_ROUTE}`, header)
             promise.then( () => {
-                
                 navigate('/');
                 localStorage.removeItem('MyWalletSession');
                 setSession(null);
             });
-            
         };
         if (action === "back") navigate('/');
     };
@@ -56,8 +54,8 @@ export default function Title ({ children, action }) {
             </h2>
             {action ? <img src={src} alt={alt} onClick={handleClick}/> : null}
         </Container>
-    )
-}
+    );
+};
 
 const Container = styled.div`
     display: flex;
@@ -71,5 +69,5 @@ const Container = styled.div`
         font-weight: 700;
         font-size: 26px;
         color: #FFFFFF;
-    }
+    };
 `;
