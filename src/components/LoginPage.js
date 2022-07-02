@@ -14,7 +14,7 @@ export default function LoginPage () {
     
     const navigate = useNavigate();
     const { session, setSession } = useContext(UserContext);
-    
+    const [isActive, setIsActive] = useState(true);
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
@@ -49,6 +49,7 @@ export default function LoginPage () {
 
         e.preventDefault();
 
+        setIsActive(false)
         const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const API_ROUTE = '/login';
 
@@ -64,10 +65,10 @@ export default function LoginPage () {
     return (
         <Page centeredContent >
             <Logo src={logo} alt='logo' />
-            <Form onSubmit={submitForm} >
-                <Input placeholder="E-mail" value={credentials.email} name='email' onChange={handleForm} />
-                <Input placeholder="Senha" value={credentials.password} name='password' onChange={handleForm} />
-                <Button>Entrar</Button>
+            <Form onSubmit={isActive ? submitForm : null} >
+                <Input placeholder="E-mail" value={credentials.email} name='email' onChange={handleForm} disabled={!isActive} required />
+                <Input placeholder="Senha" value={credentials.password} name='password' onChange={handleForm} disabled={!isActive} required />
+                <Button isActive={isActive} >Entrar</Button>
             </Form>
             <SubText to='/registration'>Primeira vez? Cadastre-se!</SubText>
         </Page>

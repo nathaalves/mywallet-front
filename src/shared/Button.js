@@ -1,6 +1,16 @@
 import styled from "styled-components";
+import { ThreeDots } from 'react-loader-spinner';
 
-const Button = styled.button`
+export default function Button ({ children, isActive }) {
+
+    return (
+        <Conatainer isActive={isActive} >
+            {isActive ? children : <ThreeDots color="#FFFFFF" height={15} width={60}  />}
+        </Conatainer>
+    );
+};
+
+const Conatainer = styled.button`
 
     all: unset;
 
@@ -11,6 +21,7 @@ const Button = styled.button`
     width: 100%;
     height: 45px;
 
+    opacity: ${props => props.isActive ? 1 : 0.7};
     background-color: #A328D6;
     border-radius: 5px;
     box-sizing: border-box;
@@ -19,7 +30,5 @@ const Button = styled.button`
     font-size: 20px;
     color: #FFFFFF;
 
-    cursor: pointer;
+    cursor: ${props => props.isActive ? 'pointer' : 'none'};
 `;
-
-export default Button;

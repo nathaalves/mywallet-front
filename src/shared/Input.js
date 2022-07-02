@@ -9,7 +9,7 @@ const Input = styled.input`
     padding-left: 15px;
     margin-bottom: 12px;
 
-    background-color: #FFFFFF;
+    background-color: ${ props => props.disabled ? '#D6D6D6': '#FFFFFF'};
     border-radius: 5px;
     box-sizing: border-box;
 

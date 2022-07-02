@@ -6,6 +6,7 @@ import UserContext from "../contexts/UserContext";
 import Page from "../shared/Page";
 import StyledButton from "../shared/StyledButton";
 import Title from "../shared/Title";
+import { Circles } from 'react-loader-spinner';
 
 function Register ({date, description, value, type}) {
 
@@ -20,7 +21,7 @@ function Register ({date, description, value, type}) {
         amount = amount?.replace(',', '');
         amount = amount?.replace('R$ ', '');
         amount = Number(amount)/100;
-        return parseFloat(amount).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        return parseFloat(amount).toFixed(2).replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
     };
 
     return (
@@ -36,9 +37,9 @@ export default function CashFlowPage () {
     const navigate = useNavigate();
     const { session } = useContext(UserContext);
     const [cashFlow, setCashFlow] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     
     let balance = 0;
-    let color = null;
     cashFlow.forEach(register => {
         let value = register.value?.replace('.', '');
         value = value?.replace(',', '');
@@ -46,8 +47,10 @@ export default function CashFlowPage () {
         value = Number(value)/100
         if (register.type === 'cash-in') balance += Number(value);
         if (register.type === 'cash-out') balance -= Number(value);
-        color = (balance < 0) ? '#C70000' : '#03AC00';
+        
     });
+    const color = (balance < 0) ? '#C70000' : '#03AC00';
+    balance = balance.toFixed(2);
 
     useEffect( () => {
 
@@ -61,7 +64,10 @@ export default function CashFlowPage () {
         };
 
         const promise = axios.get(`${API_URI}${API_ROUTE}`, header);
-        promise.then( response => setCashFlow([...response.data]));
+        promise.then( response => {
+            setCashFlow([...response.data]);
+            setIsLoading(false);
+        });
         
     }, []);
 
@@ -73,21 +79,28 @@ export default function CashFlowPage () {
         <Page>
             <Title action='exit' >{`Olá, ${session.userName}`}</Title>
             <Registers color={color}>
-                <div>
-                    {cashFlow.map((register, index) => 
-                        <Register 
-                            key={index}
-                            date={register.date}
-                            description={register.description} 
-                            value={register.value} 
-                            type={register.type}
-                        />
-                    )}
-                </div>
-                <div>
-                    <h3>SALDO</h3>
-                    <span>{balance < 0 ? balance * -1 : balance}</span>
-                </div>
+                {isLoading ?
+                <StyledDiv>
+                    <Circles color="#8C11BE" height={200} width={200}/>
+                </StyledDiv> :
+                <>
+                    <div>
+                        {cashFlow.map((register, index) => 
+                            <Register 
+                                key={index}
+                                date={register.date}
+                                description={register.description} 
+                                value={register.value} 
+                                type={register.type}
+                            />
+                        )}
+                    </div>
+                    <div>
+                        <h3>SALDO</h3>
+                        <span>{balance < 0 ? balance * -1 : balance}</span>
+                    </div>
+                </>}
+                
             </Registers>
             <ButtonContainer>
                 <StyledButton type='cash-in' onClick={ () => goToAddCashFlowPage('cash-in') } />
@@ -97,8 +110,16 @@ export default function CashFlowPage () {
     );
 };
 
+const StyledDiv = styled.div`
+    padding: calc(50% - 100px);
+`
+
 const Registers = styled.div`
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
     width: 100%;
     height: 100%;
     padding: 12px;

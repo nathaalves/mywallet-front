@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import exit from '../assets/images/exit.svg';
-import back from '../assets/images/back.svg';
+import back from '../assets/images/back.png';
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
@@ -60,6 +60,7 @@ export default function Title ({ children, action }) {
 const Container = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     width: 100%;
 
@@ -70,4 +71,11 @@ const Container = styled.div`
         font-size: 26px;
         color: #FFFFFF;
     };
+        
+    img {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
+   
 `;

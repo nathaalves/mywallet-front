@@ -35,7 +35,7 @@ const Container = styled.div`
     padding: 10px;
     margin-bottom: 16px;
 
-    background: #A328D6;
+    background-color: #A328D6;
     border-radius: 5px;
 
     cursor: pointer;

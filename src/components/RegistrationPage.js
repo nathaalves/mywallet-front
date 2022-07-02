@@ -13,6 +13,7 @@ export default function RegistrationPage () {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [isActive, setIsActive] = useState(true);
 
     function handleForm (e) {
         setUser({
@@ -25,6 +26,7 @@ export default function RegistrationPage () {
         
         e.preventDefault();
 
+        setIsActive(false);
         const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const API_ROUTE = '/registration';
 
@@ -35,12 +37,12 @@ export default function RegistrationPage () {
     return (
         <Page centeredContent >
             <Logo src={logo} alt='logo' />
-            <Form onSubmit={submitForm}>
-                <Input placeholder="Nome" name='name' onChange={handleForm} required />
-                <Input placeholder="E-mail" name='email' onChange={handleForm} required />
-                <Input placeholder="Senha" name='password' onChange={handleForm} required />
-                <Input placeholder="Confirmar a senha" name='pwConfirm' onChange={handleForm} required />
-                <Button>Cadastrar</Button>
+            <Form onSubmit={isActive ? submitForm : null}>
+                <Input placeholder="Nome" name='name' onChange={handleForm} disabled={!isActive} required />
+                <Input placeholder="E-mail" name='email' onChange={handleForm} disabled={!isActive} required />
+                <Input placeholder="Senha" name='password' onChange={handleForm} disabled={!isActive} required />
+                <Input placeholder="Confirmar a senha" name='pwConfirm' onChange={handleForm} disabled={!isActive} required />
+                <Button isActive={isActive} >Cadastrar</Button>
             </Form>
             <SubText to='/' >Já tem uma conta? Entre agora!</SubText>
         </Page>
