@@ -13,7 +13,7 @@ export default function Title ({ children, action }) {
     
     let src = null;
     let alt = null;
-    
+
     if (action === "exit") {
         src = exit;
         alt = 'exit button';
@@ -44,7 +44,7 @@ export default function Title ({ children, action }) {
                 setSession(null);
             });
         };
-        if (action === "back") navigate('/');
+        if (action === "back") navigate('/cash-flow');
     };
 
     return (
