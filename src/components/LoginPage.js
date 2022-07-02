@@ -9,9 +9,6 @@ import UserContext from "../contexts/UserContext";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Form from "../shared/Form";
-import dotenv from 'dotenv';
-
-
 
 export default function LoginPage () {
     
@@ -26,20 +23,17 @@ export default function LoginPage () {
     useEffect ( () => {
 
         if (session !== null) {
-            dotenv.config();
-            const API_URI = process.env.API_URI;
+            
+            const API_URI = 'https://my-wallet-server-project.herokuapp.com';
             const API_ROUTE = '/session';
 
-            const promise = axios.post(
-                `${API_URI}${API_ROUTE}`,
-                null, 
-                {
-                    headers: {
-                        Authorization: `Bearer ${session.token}`
-                    }
+            const header = {
+                headers: {
+                    Authorization: `Bearer ${session.token}`
                 }
-            );
+            };
 
+            const promise = axios.post(`${API_URI}${API_ROUTE}`, null, header);
             promise.then( () => navigate('/cash-flow'));
         };
     }, []);
@@ -55,8 +49,7 @@ export default function LoginPage () {
 
         e.preventDefault();
 
-        const API_URI = process.env.API_URI;
-        console.log(API_URI)
+        const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const API_ROUTE = '/login';
 
         const promise = axios.post(`${API_URI}${API_ROUTE}`, credentials);
@@ -65,9 +58,6 @@ export default function LoginPage () {
             setSession({ ...response.data });
             localStorage.setItem('MyWalletSession', JSON.stringify(response.data));
             navigate('/cash-flow');
-        });
-        promise.catch( error => {
-                //console.log(error.response.data)
         });
     };
 
@@ -82,4 +72,4 @@ export default function LoginPage () {
             <SubText to='/registration'>Primeira vez? Cadastre-se!</SubText>
         </Page>
     );
-}
+};

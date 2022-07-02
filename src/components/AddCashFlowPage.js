@@ -7,12 +7,8 @@ import { useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import { useParams } from "react-router-dom";
 import Form from "../shared/Form";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default function AddCashFlowPage () {
-
 
     const { type } = useParams();
     const { session } = useContext(UserContext);
@@ -46,7 +42,6 @@ export default function AddCashFlowPage () {
                 value = register.value;
             };
             
-
             setRegister({
                 ...register,
                 [e.target.name]: value
@@ -57,22 +52,20 @@ export default function AddCashFlowPage () {
                 [e.target.name]: e.target.value
             });
         };
-
-        
     };
 
     function submitForm (e) {
 
         e.preventDefault();
 
-        const API_URI = process.env.API_URI;
-        console.log(API_URI)
+        const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const API_ROUTE = '/cash-flow';
         
         const body = {
             ...register,
             type
         };
+        
         const header = {
             headers: {
                 Authorization: `Bearer ${session.token}`
@@ -81,18 +74,10 @@ export default function AddCashFlowPage () {
 
         const promise = axios.post(`${API_URI}${API_ROUTE}`, body, header);
 
-        promise
-            .then( response => {
-                //console.log(response.data)
-            })
-            .catch( error => {
-                //console.log(error.response.data)
-            })
-
-            setRegister({
-                value: 'R$ 0,00',
-                description: ''
-            });
+        promise.then( () => setRegister({
+            value: 'R$ 0,00',
+            description: ''
+        }));
     };
 
     return (
@@ -105,4 +90,4 @@ export default function AddCashFlowPage () {
             </Form>
         </Page>
     );
-}
+};

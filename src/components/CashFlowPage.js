@@ -6,9 +6,6 @@ import UserContext from "../contexts/UserContext";
 import Page from "../shared/Page";
 import StyledButton from "../shared/StyledButton";
 import Title from "../shared/Title";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 function Register ({date, description, value, type}) {
 
@@ -31,9 +28,8 @@ function Register ({date, description, value, type}) {
             <h3><span>{formatDate}</span>{description}</h3>
             <span>{formatCurrency(value)}</span>
         </RegisterContainer>
-    )
-}
-
+    );
+};
 
 export default function CashFlowPage () {
 
@@ -55,21 +51,17 @@ export default function CashFlowPage () {
 
     useEffect( () => {
 
-        const API_URI = process.env.API_URI;
+        const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const API_ROUTE = '/cash-flow';
-        
-        const promise = axios.get(
-            `${API_URI}${API_ROUTE}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${session.token}`
-                }
-            }
-        );
 
-        promise.then( response => {
-            setCashFlow([...response.data]);
-        });
+        const header = {
+            headers: {
+                Authorization: `Bearer ${session.token}`
+            }
+        };
+
+        const promise = axios.get(`${API_URI}${API_ROUTE}`, header);
+        promise.then( response => setCashFlow([...response.data]));
         
     }, []);
 
@@ -102,8 +94,8 @@ export default function CashFlowPage () {
                 <StyledButton type='cash-out' onClick={ () => goToAddCashFlowPage('cash-out') } />
             </ButtonContainer>
         </Page>
-    )
-}
+    );
+};
 
 const Registers = styled.div`
     
@@ -118,7 +110,7 @@ const Registers = styled.div`
     & > div:first-child {
         width: 100%;
         height: calc(100% - 17px - 12px);
-    }
+    };
 
     & > div:last-child {
         display: flex;
@@ -131,12 +123,12 @@ const Registers = styled.div`
         h3 {
             font-weight: 700;
             color: #000000;
-        }
+        };
 
         span {
             color: ${props => props.color}
-        }
-    }
+        };
+    };
 `;
 
 const RegisterContainer = styled.div`
@@ -150,16 +142,16 @@ const RegisterContainer = styled.div`
 
     h3 {
         color: #000000;
-    }
+    };
 
     h3 > span {
         color: #C6C6C6;
-    }
+    };
 
     span {
         margin-right: 10px;
         color: ${props => props.color}
-    }
+    };
     
 `;
 

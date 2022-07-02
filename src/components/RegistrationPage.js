@@ -8,9 +8,6 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Form from "../shared/Form";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default function RegistrationPage () {
 
@@ -25,20 +22,14 @@ export default function RegistrationPage () {
     };
 
     function submitForm (e) {
+        
         e.preventDefault();
 
         const API_URI = 'https://my-wallet-server-project.herokuapp.com';
-        const ROUT = '/registration';
+        const API_ROUTE = '/registration';
 
-        const promise = axios.post(`${API_URI}${ROUT}`, user);
-
-        promise
-            .then( () => {
-                navigate('/');
-            })
-            .catch( (error) => {
-                //console.log(error.response.data)
-        });
+        const promise = axios.post(`${API_URI}${API_ROUTE}`, user);
+        promise.then( () => navigate('/'));
     };
 
     return (
@@ -53,5 +44,5 @@ export default function RegistrationPage () {
             </Form>
             <SubText to='/' >Já tem uma conta? Entre agora!</SubText>
         </Page>
-    )
-}
+    );
+};
