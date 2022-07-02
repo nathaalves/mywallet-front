@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Form from "../shared/Form";
 import dotenv from 'dotenv';
 
-dotenv.config();
+
 
 export default function LoginPage () {
     
@@ -26,7 +26,7 @@ export default function LoginPage () {
     useEffect ( () => {
 
         if (session !== null) {
-            
+            dotenv.config();
             const API_URI = process.env.API_URI;
             const API_ROUTE = '/session';
 
