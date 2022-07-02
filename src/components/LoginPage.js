@@ -60,6 +60,11 @@ export default function LoginPage () {
             localStorage.setItem('MyWalletSession', JSON.stringify(response.data));
             navigate('/cash-flow');
         });
+
+        promise.catch( (error) => {
+            console.log(error)
+            setIsActive(true)
+        });
     };
 
     return (
