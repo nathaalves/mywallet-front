@@ -8,6 +8,9 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Form from "../shared/Form";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default function RegistrationPage () {
 
@@ -24,10 +27,10 @@ export default function RegistrationPage () {
     function submitForm (e) {
         e.preventDefault();
 
-        const API_URL = 'http://localhost:5000';
+        const API_URI = process.env.API_URI;
         const ROUT = '/registration';
 
-        const promise = axios.post(`${API_URL}${ROUT}`, user);
+        const promise = axios.post(`${API_URI}${ROUT}`, user);
 
         promise
             .then( () => {

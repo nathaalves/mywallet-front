@@ -6,7 +6,9 @@ import UserContext from "../contexts/UserContext";
 import Page from "../shared/Page";
 import StyledButton from "../shared/StyledButton";
 import Title from "../shared/Title";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 function Register ({date, description, value, type}) {
 
@@ -53,11 +55,11 @@ export default function CashFlowPage () {
 
     useEffect( () => {
 
-        const API_URL = 'http://localhost:5000';
+        const API_URI = process.env.API_URI;
         const API_ROUTE = '/cash-flow';
         
         const promise = axios.get(
-            `${API_URL}${API_ROUTE}`,
+            `${API_URI}${API_ROUTE}`,
             {
                 headers: {
                     Authorization: `Bearer ${session.token}`

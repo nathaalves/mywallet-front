@@ -9,6 +9,9 @@ import UserContext from "../contexts/UserContext";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Form from "../shared/Form";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default function LoginPage () {
     
@@ -24,11 +27,11 @@ export default function LoginPage () {
 
         if (session !== null) {
             
-            const API_URL = 'http://localhost:5000';
+            const API_URI = process.env.API_URI;
             const API_ROUTE = '/session';
 
             const promise = axios.post(
-                `${API_URL}${API_ROUTE}`,
+                `${API_URI}${API_ROUTE}`,
                 null, 
                 {
                     headers: {
@@ -52,10 +55,10 @@ export default function LoginPage () {
 
         e.preventDefault();
 
-        const API_URL = 'http://localhost:5000';
+        const API_URI = process.env.API_URI;
         const API_ROUTE = '/login';
 
-        const promise = axios.post(`${API_URL}${API_ROUTE}`, credentials);
+        const promise = axios.post(`${API_URI}${API_ROUTE}`, credentials);
 
         promise.then( response => {
             setSession({ ...response.data });

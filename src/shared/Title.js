@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default function Title ({ children, action }) {
 
@@ -25,7 +28,7 @@ export default function Title ({ children, action }) {
         
         if (action === "exit") {
             
-            const API_URL = 'http://localhost:5000';
+            const API_URI = process.env.API_URI;
             const API_ROUTE = "/session";
 
             const header = {
@@ -34,7 +37,7 @@ export default function Title ({ children, action }) {
                 }
             }
 
-            const promise = axios.delete(`${API_URL}${API_ROUTE}`, header)
+            const promise = axios.delete(`${API_URI}${API_ROUTE}`, header)
             promise.then( () => {
                 
                 navigate('/');
@@ -51,7 +54,7 @@ export default function Title ({ children, action }) {
             <h2>
                 {children}
             </h2>
-            {action ? <img src={exit} alt={alt} onClick={handleClick}/> : null}
+            {action ? <img src={src} alt={alt} onClick={handleClick}/> : null}
         </Container>
     )
 }

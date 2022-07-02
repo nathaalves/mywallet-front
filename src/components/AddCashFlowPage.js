@@ -7,6 +7,9 @@ import { useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import { useParams } from "react-router-dom";
 import Form from "../shared/Form";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default function AddCashFlowPage () {
 
@@ -64,7 +67,7 @@ export default function AddCashFlowPage () {
 
         e.preventDefault();
 
-        const API_URL = 'http://localhost:5000';
+        const API_URI = process.env.API_URI;
         const API_ROUTE = '/cash-flow';
         
         const body = {
@@ -77,7 +80,7 @@ export default function AddCashFlowPage () {
             }
         };
 
-        const promise = axios.post(`${API_URL}${API_ROUTE}`, body, header);
+        const promise = axios.post(`${API_URI}${API_ROUTE}`, body, header);
 
         promise
             .then( response => {
