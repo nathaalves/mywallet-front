@@ -27,7 +27,7 @@ export default function RegistrationPage () {
     function submitForm (e) {
         e.preventDefault();
 
-        const API_URI = process.env.API_URI;
+        const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const ROUT = '/registration';
 
         const promise = axios.post(`${API_URI}${ROUT}`, user);

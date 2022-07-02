@@ -56,6 +56,7 @@ export default function LoginPage () {
         e.preventDefault();
 
         const API_URI = process.env.API_URI;
+        console.log(API_URI)
         const API_ROUTE = '/login';
 
         const promise = axios.post(`${API_URI}${API_ROUTE}`, credentials);

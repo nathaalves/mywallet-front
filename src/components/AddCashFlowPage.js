@@ -28,8 +28,6 @@ export default function AddCashFlowPage () {
 
     function handleForm (e) {
 
-        
-
         if (e.target.name === 'value') {
 
             const formatCurrency = function(amount) {
@@ -68,6 +66,7 @@ export default function AddCashFlowPage () {
         e.preventDefault();
 
         const API_URI = process.env.API_URI;
+        console.log(API_URI)
         const API_ROUTE = '/cash-flow';
         
         const body = {
