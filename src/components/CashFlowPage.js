@@ -7,30 +7,7 @@ import Page from "../shared/Page";
 import StyledButton from "../shared/StyledButton";
 import Title from "../shared/Title";
 import { Circles } from 'react-loader-spinner';
-
-function Register ({date, description, value, type}) {
-
-    let color = null;
-    if (type === 'cash-in') color = '#03AC00';
-    if (type === 'cash-out') color = '#C70000';
-    
-    const formatDate = `${date[8]}${date[9]}/${date[5]}${date[6]}`;
-
-    const formatCurrency = function(amount) {
-        amount = amount?.replace('.', '');
-        amount = amount?.replace(',', '');
-        amount = amount?.replace('R$ ', '');
-        amount = Number(amount)/100;
-        return parseFloat(amount).toFixed(2).replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-    };
-
-    return (
-        <RegisterContainer color={color} >
-            <h3><span>{formatDate}</span>{description}</h3>
-            <span>{formatCurrency(value)}</span>
-        </RegisterContainer>
-    );
-};
+import Register from "./Register";
 
 export default function CashFlowPage () {
 
@@ -47,13 +24,12 @@ export default function CashFlowPage () {
         value = Number(value)/100
         if (register.type === 'cash-in') balance += Number(value);
         if (register.type === 'cash-out') balance -= Number(value);
-        
     });
+
     const color = (balance < 0) ? '#C70000' : '#03AC00';
     balance = balance.toFixed(2);
 
-    useEffect( () => {
-
+    function renderRegisters() {
         const API_URI = 'https://my-wallet-server-project.herokuapp.com';
         const API_ROUTE = '/cash-flow';
 
@@ -68,8 +44,9 @@ export default function CashFlowPage () {
             setCashFlow([...response.data]);
             setIsLoading(false);
         });
-        
-    }, []);
+    };
+
+    useEffect( () => renderRegisters(), []);
 
     function goToAddCashFlowPage (type) {
         navigate(`/add-cash-flow/${type}`);
@@ -80,27 +57,30 @@ export default function CashFlowPage () {
             <Title action='exit' >{`Olá, ${session.userName}`}</Title>
             <Registers color={color}>
                 {isLoading ?
-                <StyledDiv>
-                    <Circles color="#8C11BE" height={200} width={200}/>
-                </StyledDiv> :
-                <>
-                    <div>
-                        {cashFlow.map((register, index) => 
-                            <Register 
-                                key={index}
-                                date={register.date}
-                                description={register.description} 
-                                value={register.value} 
-                                type={register.type}
-                            />
-                        )}
-                    </div>
-                    <div>
-                        <h3>SALDO</h3>
-                        <span>{balance < 0 ? balance * -1 : balance}</span>
-                    </div>
-                </>}
-                
+                    <StyledDiv>
+                        <Circles color="#8C11BE" height={200} width={200}/>
+                    </StyledDiv> :
+                    <>
+                        <div>
+                            {cashFlow.map((register, index) => 
+                                <Register 
+                                    key={index}
+                                    id={register._id}
+                                    date={register.date}
+                                    description={register.description} 
+                                    value={register.value} 
+                                    type={register.type}
+                                    renderRegisters={renderRegisters}
+                                    setIsLoading={setIsLoading}
+                                />
+                            )}
+                        </div>
+                        <div>
+                            <h3>SALDO</h3>
+                            <span>{balance < 0 ? balance * -1 : balance}</span>
+                        </div>
+                    </>
+                }                
             </Registers>
             <ButtonContainer>
                 <StyledButton type='cash-in' onClick={ () => goToAddCashFlowPage('cash-in') } />
@@ -111,8 +91,8 @@ export default function CashFlowPage () {
 };
 
 const StyledDiv = styled.div`
-    padding: calc(50% - 100px);
-`
+    padding: calc(20% - 100px) calc(50% - 100px);
+`;
 
 const Registers = styled.div`
     display: flex;
@@ -134,10 +114,10 @@ const Registers = styled.div`
     };
 
     & > div:last-child {
+
         display: flex;
         justify-content: space-between;
         width: 100%;
-
 
         font-size: 17px;
 
@@ -150,30 +130,6 @@ const Registers = styled.div`
             color: ${props => props.color}
         };
     };
-`;
-
-const RegisterContainer = styled.div`
-
-    display: flex;
-    justify-content: space-between;
-
-    margin-bottom: 12px;
-    font-weight: 400;
-    font-size: 16px;v
-
-    h3 {
-        color: #000000;
-    };
-
-    h3 > span {
-        color: #C6C6C6;
-    };
-
-    span {
-        margin-right: 10px;
-        color: ${props => props.color}
-    };
-    
 `;
 
 const ButtonContainer = styled.div`

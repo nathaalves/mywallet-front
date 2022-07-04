@@ -26,7 +26,7 @@ export default function Title ({ children, action }) {
 
     function handleClick () {
         
-        if (action === "exit") {
+        if (action === "exit" && window.confirm('Você realente deseja sair?')) {
             
             const API_URI = 'https://my-wallet-server-project.herokuapp.com';
             const API_ROUTE = "/session";

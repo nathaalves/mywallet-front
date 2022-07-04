@@ -6,6 +6,7 @@ import CashFlowPage from "./CashFlowPage";
 import AddCashFlowPage from "./AddCashFlowPage";
 import UserContext from "../contexts/UserContext";
 import { useState, } from 'react';
+import NonExistentRoutePage from "./NonExistentRoutePage";
 
 export default function App () {
 
@@ -23,6 +24,7 @@ export default function App () {
                     <Route path='/registration' element={ <RegistrationPage /> } />
                     <Route path='/cash-flow' element={ <CashFlowPage /> } />
                     <Route path='/add-cash-flow/:type' element={ <AddCashFlowPage /> } />
+                    <Route path="/*" element={<NonExistentRoutePage />} />
                 </Routes>
             </BrowserRouter>
         </UserContext.Provider>
