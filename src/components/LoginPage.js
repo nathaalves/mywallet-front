@@ -62,8 +62,8 @@ export default function LoginPage () {
         });
 
         promise.catch( (error) => {
-            console.log(error)
-            setIsActive(true)
+            setIsActive(true);
+            alert('Login ou senha invalido!')
         });
     };
 

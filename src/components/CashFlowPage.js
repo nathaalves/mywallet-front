@@ -60,26 +60,29 @@ export default function CashFlowPage () {
                     <StyledDiv>
                         <Circles color="#8C11BE" height={200} width={200}/>
                     </StyledDiv> :
-                    <>
-                        <div>
-                            {cashFlow.map((register, index) => 
-                                <Register 
-                                    key={index}
-                                    id={register._id}
-                                    date={register.date}
-                                    description={register.description} 
-                                    value={register.value} 
-                                    type={register.type}
-                                    renderRegisters={renderRegisters}
-                                    setIsLoading={setIsLoading}
-                                />
-                            )}
-                        </div>
-                        <div>
-                            <h3>SALDO</h3>
-                            <span>{balance < 0 ? balance * -1 : balance}</span>
-                        </div>
-                    </>
+                    cashFlow.length ? 
+                        <>
+                            <div>
+                                {cashFlow.map((register, index) => 
+                                    <Register 
+                                        key={index}
+                                        id={register._id}
+                                        date={register.date}
+                                        description={register.description} 
+                                        value={register.value} 
+                                        type={register.type}
+                                        renderRegisters={renderRegisters}
+                                        setIsLoading={setIsLoading}
+                                    />
+                                )}
+                            </div>
+                            <div>
+                                <h3>SALDO</h3>
+                                <span>{balance < 0 ? balance * -1 : balance}</span>
+                            </div>
+                        </>
+                        : <Message>Não há registros de entrada ou saída</Message>
+                    
                 }                
             </Registers>
             <ButtonContainer>
@@ -136,4 +139,13 @@ const ButtonContainer = styled.div`
     display: flex;
     gap: 13px;
     width: 100%;
+`;
+
+const Message = styled.h2`
+    width: 180px;
+    margin: auto;
+    font-weight: 400;
+    font-size: 20px;
+    text-align: center;
+    color: #868686;
 `;

@@ -31,7 +31,10 @@ export default function RegistrationPage () {
         const API_ROUTE = '/registration';
 
         const promise = axios.post(`${API_URI}${API_ROUTE}`, user);
-        promise.then( () => navigate('/'));
+        promise.then( () => {
+            alert('Cadastro realizado com sucesso!');
+            navigate('/');
+        });
     };
 
     return (
